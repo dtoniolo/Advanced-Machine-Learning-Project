@@ -30,7 +30,8 @@ def plot_history(history):
         fig.update_yaxes(title=key.capitalize(), row=i, col=1)
     fig.update_layout(template='plotly_white', height = 300*n_plots)
     fig.update_xaxes(title='Epochs', range=[0, epochs[-1]+1])
-    fig.update_xaxes(showticklabels=True, row=1, col=1)
+    for i in range(1, n_plots+1):
+        fig.update_xaxes(showticklabels=True, row=i, col=1)
     return fig
 
 def plot_history_hpo(results):
