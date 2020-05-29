@@ -1,3 +1,4 @@
+import numpy as np
 import plotly
 from plotly.subplots import make_subplots
 import plotly.graph_objects as go
@@ -5,6 +6,7 @@ import plotly.graph_objects as go
 
 def plot_history(history):
     epochs = history.epoch
+    epochs = np.array(epochs) +1
     history = history.history
     n_plots = int(len(history)/2)
     plots = list()
@@ -27,7 +29,8 @@ def plot_history(history):
                               marker_color='#FC766A', showlegend=showlegend), row=i , col=1)
         fig.update_yaxes(title=key.capitalize(), row=i, col=1)
     fig.update_layout(template='plotly_white', height = 300*n_plots)
-    fig.update_xaxes(title='Epochs')
+    fig.update_xaxes(title='Epochs', range=[0, epochs[-1]+1])
+    fig.update_xaxes(showticklabels=True, row=1, col=1)
     return fig
 
 def plot_history_hpo(results):
@@ -46,10 +49,10 @@ def plot_history_hpo(results):
           showlegend=False
         i += 1
         for name in results:
-        history = results[name].history
-        epochs = history.epochs
+            history = results[name].history
+            epochs = history.epochs
             fig.add_trace(go.Scatter(x=epochs, y=history[key], mode = 'lines',
-                                     name='Training'+name, legendgroup='Training',, showlegend=showlegend), row=i , col=1)
+                                     name='Training'+name, legendgroup='Training', showlegend=showlegend), row=i , col=1)
             fig.add_trace(go.Scatter(x=epochs, y=history['val_' + key], mode = 'lines',
                                      name='Validation'+name, legendgroup='Validation', showlegend=showlegend), row=i , col=1)
         fig.update_yaxes(title=key.capitalize(), row=i, col=1)
